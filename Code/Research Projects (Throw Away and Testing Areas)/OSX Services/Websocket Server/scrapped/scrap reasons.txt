@@ -1,0 +1,6 @@
+This file keeps track of why files were scrapped and the reasoning behind it
+
+server.c			socket gets opened and recieves message, but does not complete the websocket handshake. It only recieves and does not respond back correctly
+client.c			This was used to test server.c initially and worked, but when using the "Websocket ServerClient.java" application, it did not work. See above.
+server_scrap1		socket gets oppened but would not remain open. This apparently happens due to the basic implementation of the socket library
+server_scrap2			Scrapped due to python 3.5 not natively included in MacOS Sierra

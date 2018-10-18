@@ -1,0 +1,727 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Parent;
+
+import Main.Callback;
+import Main.EmptyCallback;
+import Main.WebsocketClient;
+import java.awt.Container;
+import java.awt.Window;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.JFrame;
+
+/**
+ *
+ * @author Patryk
+ */
+public class EditBlacklist extends javax.swing.JPanel
+{
+    public enum type { PROGRAM, WEBSITE };
+    public enum action { ADD, REMOVE };
+    class setEntry
+    {
+        public String _name;
+        public type _type;
+        public action _action;
+
+        public setEntry(String name, type type, action action)
+        {
+            this._name = name;
+            this._type = type;
+            this._action = action;
+        }
+
+        
+        
+    }
+    WebsocketClient _client;
+        
+    int selectedInstalledApplicationRow;
+    int selectedBlacklistProgramRow;
+    int selectedBlacklistWebsiteRow;
+    
+    List<setEntry> _actionList;
+    
+    /**
+     * Creates new form EditBlacklist
+     */
+    public EditBlacklist()
+    {
+        selectedInstalledApplicationRow = -1;
+        selectedBlacklistProgramRow = -1;
+        selectedBlacklistWebsiteRow = -1;
+        
+        _actionList = new LinkedList<>();
+        
+        initComponents();
+        try {
+            _client = WebsocketClient.getInstace();
+        }
+        catch (URISyntaxException ex) {
+            Logger.getLogger(EditBlacklist.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jRadioButtonInstalledApplications.setSelected(true);
+        try
+        {
+         InitializeInstalledApplicationList();
+        InitializeBlackListedApplications();
+        InitializeBlackListedWebsites();
+        }
+        catch(Exception ex)
+        {
+            Logger.getLogger(EditBlacklist.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void InitializeInstalledApplicationList() throws Exception
+    {
+        DefaultTableModel installedApplicationsModel = new DefaultTableModel(new String[]{"Installed Applications"}, 0){
+             @Override
+            public boolean isCellEditable(int i, int j) {
+                return false;
+            }
+        };
+        _client.RequestInstalledProgramList(new Callback()
+        {
+            @Override
+            public void call(String[] params)
+            {
+                for(String s : params)
+                {
+                    installedApplicationsModel.addRow(new String[] {s});
+                }
+                jTableInstalledApplications.setModel(installedApplicationsModel);
+                revalidate();
+                repaint();
+            }
+        });        
+    }
+    
+    private void InitializeBlackListedApplications() throws Exception
+    {
+        DefaultTableModel blackistedProgramsModel = new DefaultTableModel(new String[]{"Blacklisted Applications"}, 0){
+             @Override
+            public boolean isCellEditable(int i, int j) {
+                return false;
+            }
+        };
+        _client.RequestBlacklistProgramList(new Callback()
+        {
+            @Override
+            public void call(String[] params)
+            {
+                for(String s : params)
+                {
+                    if(!s.contains("DONOTDELETE"))
+                        blackistedProgramsModel.addRow(new String[] {s});
+                }
+                jTableBlacklistedApplications.setModel(blackistedProgramsModel);
+                revalidate();
+                repaint();
+            }
+        });
+    }
+    
+    private void InitializeBlackListedWebsites() throws Exception
+    {
+        DefaultTableModel blacklistedWebsitesModel = new DefaultTableModel(new String[]{"Blacklisted Websites"}, 0){
+             @Override
+            public boolean isCellEditable(int i, int j) {
+                return false;
+            }
+        };
+        _client.RequestBlacklistWebsiteList(new Callback()
+        {
+            @Override
+            public void call(String[] params)
+            {
+                for(String s : params)
+                {
+                    if(!s.contains("DONOTDELETE"))
+                        blacklistedWebsitesModel.addRow(new String[] {s});
+                }
+                jTableBlacklistedWebsites.setModel(blacklistedWebsitesModel);
+                revalidate();
+                repaint();
+            }
+        });
+    }
+
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents()
+    {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableBlacklistedApplications = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableInstalledApplications = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableBlacklistedWebsites = new javax.swing.JTable();
+        jRadioButtonInstalledApplications = new javax.swing.JRadioButton();
+        jRadioButtonWebsites = new javax.swing.JRadioButton();
+        jTextFieldWebsites = new javax.swing.JTextField();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonRemove = new javax.swing.JButton();
+        jButtonApply = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
+
+        jTableBlacklistedApplications.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableBlacklistedApplications.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String []
+            {
+                "Blacklisted Applications"
+            }
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean []
+            {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableBlacklistedApplications.setRowSelectionAllowed(false);
+        jTableBlacklistedApplications.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                jTableBlacklistedApplicationsFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                jTableBlacklistedApplicationsFocusLost(evt);
+            }
+        });
+        jTableBlacklistedApplications.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseReleased(java.awt.event.MouseEvent evt)
+            {
+                jTableBlacklistedApplicationsMouseReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableBlacklistedApplications);
+
+        jTableInstalledApplications.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableInstalledApplications.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {"Minecraft"},
+                {"Spotify"},
+                {null},
+                {null}
+            },
+            new String []
+            {
+                "Installed Applications"
+            }
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean []
+            {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableInstalledApplications.setRowSelectionAllowed(false);
+        jTableInstalledApplications.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                jTableInstalledApplicationsFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                jTableInstalledApplicationsFocusLost(evt);
+            }
+        });
+        jTableInstalledApplications.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseReleased(java.awt.event.MouseEvent evt)
+            {
+                jTableInstalledApplicationsMouseReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTableInstalledApplications);
+
+        jTableBlacklistedWebsites.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTableBlacklistedWebsites.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String []
+            {
+                "Blacklisted Websites"
+            }
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean []
+            {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        jTableBlacklistedWebsites.setRowSelectionAllowed(false);
+        jTableBlacklistedWebsites.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                jTableBlacklistedWebsitesFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                jTableBlacklistedWebsitesFocusLost(evt);
+            }
+        });
+        jTableBlacklistedWebsites.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseReleased(java.awt.event.MouseEvent evt)
+            {
+                jTableBlacklistedWebsitesMouseReleased(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTableBlacklistedWebsites);
+
+        buttonGroup1.add(jRadioButtonInstalledApplications);
+        jRadioButtonInstalledApplications.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
+                jRadioButtonInstalledApplicationsStateChanged(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButtonWebsites);
+        jRadioButtonWebsites.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jRadioButtonWebsites.setText("WebSites:");
+        jRadioButtonWebsites.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
+                jRadioButtonWebsitesStateChanged(evt);
+            }
+        });
+        jRadioButtonWebsites.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                jRadioButtonWebsitesFocusGained(evt);
+            }
+        });
+
+        jTextFieldWebsites.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextFieldWebsites.addFocusListener(new java.awt.event.FocusAdapter()
+        {
+            public void focusGained(java.awt.event.FocusEvent evt)
+            {
+                jTextFieldWebsitesFocusGained(evt);
+            }
+        });
+        jTextFieldWebsites.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyReleased(java.awt.event.KeyEvent evt)
+            {
+                jTextFieldWebsitesKeyReleased(evt);
+            }
+        });
+
+        jButtonAdd.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonAdd.setText("Add");
+        jButtonAdd.setEnabled(false);
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonAddActionPerformed(evt);
+            }
+        });
+
+        jButtonRemove.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonRemove.setText("Remove");
+        jButtonRemove.setEnabled(false);
+        jButtonRemove.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonRemoveActionPerformed(evt);
+            }
+        });
+
+        jButtonApply.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonApply.setText("Apply");
+        jButtonApply.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonApplyActionPerformed(evt);
+            }
+        });
+
+        jButtonCancel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonCancel.setText("Cancel");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jRadioButtonInstalledApplications)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jRadioButtonWebsites)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldWebsites, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonRemove)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 4, Short.MAX_VALUE)
+                        .addComponent(jButtonCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonApply, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jRadioButtonInstalledApplications))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jRadioButtonWebsites)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldWebsites, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonAdd)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonRemove)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonApply)
+                    .addComponent(jButtonCancel))
+                .addContainerGap())
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonApplyActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonApplyActionPerformed
+    {//GEN-HEADEREND:event_jButtonApplyActionPerformed
+        try
+        {
+            for(setEntry entry : _actionList)
+            {
+                if(entry._action ==action.ADD)
+                {
+                    if(entry._type == type.PROGRAM)
+                    {
+                        _client.AddToBlacklistProgram(entry._name, EmptyCallback.GetInstace());
+                    }
+                    else
+                    {
+                        _client.AddToBlacklistWebsite(entry._name, EmptyCallback.GetInstace());
+                    }
+                }
+                else
+                {
+                    if(entry._type == type.PROGRAM)
+                    {
+                        _client.RemoveFromBlacklistProgram(entry._name, EmptyCallback.GetInstace());
+                    }
+                    else
+                    {
+                        _client.RemoveFromBlacklistWebsite(entry._name, EmptyCallback.GetInstace());
+                    }
+                }
+            }
+            
+        }
+        catch (Exception ex) {
+            Logger.getLogger(EditBlacklist.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        _actionList.clear();
+    }//GEN-LAST:event_jButtonApplyActionPerformed
+
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelActionPerformed
+    {//GEN-HEADEREND:event_jButtonCancelActionPerformed
+        try{
+            InitializeBlackListedApplications();
+            InitializeBlackListedWebsites();
+            InitializeInstalledApplicationList();
+            _actionList.clear();
+            revalidate();
+            repaint();
+        }
+        catch(Exception ex)
+        {
+            Logger.getLogger(EditBlacklist.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButtonCancelActionPerformed
+
+    private void jTableInstalledApplicationsMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTableInstalledApplicationsMouseReleased
+    {//GEN-HEADEREND:event_jTableInstalledApplicationsMouseReleased
+        if(!jRadioButtonInstalledApplications.isSelected())
+            return;
+        selectedInstalledApplicationRow = jTableInstalledApplications.getSelectedRow();
+        updateAddButtonEnabled();
+            
+        
+    }//GEN-LAST:event_jTableInstalledApplicationsMouseReleased
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddActionPerformed
+    {//GEN-HEADEREND:event_jButtonAddActionPerformed
+        if(jRadioButtonInstalledApplications.isSelected())
+        {
+            if(selectedInstalledApplicationRow != -1)
+            {
+                DefaultTableModel model = (DefaultTableModel) jTableBlacklistedApplications.getModel();
+                model.addRow(new Object[]{jTableInstalledApplications.getValueAt(selectedInstalledApplicationRow, 0)});
+                setEntry entry = new setEntry(jTableInstalledApplications.getValueAt(selectedInstalledApplicationRow, 0).toString(), type.PROGRAM, action.ADD);
+                _actionList.add(entry);
+                jTableBlacklistedApplications.setModel(model);
+            }
+        }
+        else
+        {
+            DefaultTableModel model = (DefaultTableModel) jTableBlacklistedWebsites.getModel();
+            model.addRow(new Object[]{jTextFieldWebsites.getText(), 0});
+            setEntry entry = new setEntry(jTextFieldWebsites.getText(), type.WEBSITE, action.ADD);
+            _actionList.add(entry);
+            jTableBlacklistedWebsites.setModel(model);
+        }
+        jButtonAdd.setEnabled(false);
+        revalidate();
+        repaint();
+    }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jTextFieldWebsitesKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTextFieldWebsitesKeyReleased
+    {//GEN-HEADEREND:event_jTextFieldWebsitesKeyReleased
+        updateAddButtonEnabled();
+    }//GEN-LAST:event_jTextFieldWebsitesKeyReleased
+
+    private void jRadioButtonInstalledApplicationsStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_jRadioButtonInstalledApplicationsStateChanged
+    {//GEN-HEADEREND:event_jRadioButtonInstalledApplicationsStateChanged
+        updateAddButtonEnabled();
+    }//GEN-LAST:event_jRadioButtonInstalledApplicationsStateChanged
+
+    private void jRadioButtonWebsitesStateChanged(javax.swing.event.ChangeEvent evt)//GEN-FIRST:event_jRadioButtonWebsitesStateChanged
+    {//GEN-HEADEREND:event_jRadioButtonWebsitesStateChanged
+        updateAddButtonEnabled();
+    }//GEN-LAST:event_jRadioButtonWebsitesStateChanged
+
+    private void jTableInstalledApplicationsFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTableInstalledApplicationsFocusLost
+    {//GEN-HEADEREND:event_jTableInstalledApplicationsFocusLost
+        //selectedInstalledApplicationRow = -1;
+        updateAddButtonEnabled();
+    }//GEN-LAST:event_jTableInstalledApplicationsFocusLost
+
+    private void jTableBlacklistedApplicationsFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTableBlacklistedApplicationsFocusLost
+    {//GEN-HEADEREND:event_jTableBlacklistedApplicationsFocusLost
+        //selectedBlacklistProgramRow = -1;
+        updateRemoveButtonEnabled();
+    }//GEN-LAST:event_jTableBlacklistedApplicationsFocusLost
+
+    private void jTableBlacklistedWebsitesFocusLost(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTableBlacklistedWebsitesFocusLost
+    {//GEN-HEADEREND:event_jTableBlacklistedWebsitesFocusLost
+        //selectedBlacklistWebsiteRow = -1;
+        updateRemoveButtonEnabled();
+    }//GEN-LAST:event_jTableBlacklistedWebsitesFocusLost
+
+    private void jTableBlacklistedApplicationsMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTableBlacklistedApplicationsMouseReleased
+    {//GEN-HEADEREND:event_jTableBlacklistedApplicationsMouseReleased
+        selectedBlacklistWebsiteRow = -1;
+        selectedBlacklistProgramRow = jTableBlacklistedApplications.getSelectedRow();
+        updateRemoveButtonEnabled();
+    }//GEN-LAST:event_jTableBlacklistedApplicationsMouseReleased
+
+    private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonRemoveActionPerformed
+    {//GEN-HEADEREND:event_jButtonRemoveActionPerformed
+        if(selectedBlacklistProgramRow != -1)
+        {
+            DefaultTableModel model = (DefaultTableModel) jTableBlacklistedApplications.getModel();
+            setEntry entry = new setEntry(model.getValueAt(selectedBlacklistProgramRow, 0).toString(), type.PROGRAM, action.REMOVE);
+            _actionList.add(entry);
+            model.removeRow(selectedBlacklistProgramRow);
+            jTableBlacklistedApplications.setModel(model);
+        }
+        else if(selectedBlacklistWebsiteRow != -1)
+        {
+            DefaultTableModel model = (DefaultTableModel) jTableBlacklistedWebsites.getModel();
+            setEntry entry = new setEntry(model.getValueAt(selectedBlacklistWebsiteRow, 0).toString(), type.WEBSITE, action.REMOVE);
+            _actionList.add(entry);
+            model.removeRow(selectedBlacklistWebsiteRow);
+            jTableBlacklistedWebsites.setModel(model);
+        }
+        selectedBlacklistWebsiteRow = -1;
+        selectedBlacklistProgramRow = -1;
+        updateRemoveButtonEnabled();
+        revalidate();
+        repaint();
+    }//GEN-LAST:event_jButtonRemoveActionPerformed
+
+    private void jTableBlacklistedWebsitesMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTableBlacklistedWebsitesMouseReleased
+    {//GEN-HEADEREND:event_jTableBlacklistedWebsitesMouseReleased
+        selectedBlacklistProgramRow = -1;
+        selectedBlacklistWebsiteRow = jTableBlacklistedWebsites.getSelectedRow();
+        updateRemoveButtonEnabled();
+    }//GEN-LAST:event_jTableBlacklistedWebsitesMouseReleased
+
+    private void jTableInstalledApplicationsFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTableInstalledApplicationsFocusGained
+    {//GEN-HEADEREND:event_jTableInstalledApplicationsFocusGained
+        selectedBlacklistWebsiteRow = -1;
+        selectedBlacklistProgramRow = -1;
+        updateRemoveButtonEnabled();
+    }//GEN-LAST:event_jTableInstalledApplicationsFocusGained
+
+    private void jRadioButtonWebsitesFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jRadioButtonWebsitesFocusGained
+    {//GEN-HEADEREND:event_jRadioButtonWebsitesFocusGained
+        selectedBlacklistWebsiteRow = -1;
+        selectedBlacklistProgramRow = -1;
+        updateRemoveButtonEnabled();
+    }//GEN-LAST:event_jRadioButtonWebsitesFocusGained
+
+    private void jTextFieldWebsitesFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTextFieldWebsitesFocusGained
+    {//GEN-HEADEREND:event_jTextFieldWebsitesFocusGained
+        selectedBlacklistWebsiteRow = -1;
+        selectedBlacklistProgramRow = -1;
+        updateRemoveButtonEnabled();
+    }//GEN-LAST:event_jTextFieldWebsitesFocusGained
+
+    private void jTableBlacklistedApplicationsFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTableBlacklistedApplicationsFocusGained
+    {//GEN-HEADEREND:event_jTableBlacklistedApplicationsFocusGained
+        selectedInstalledApplicationRow = -1;
+        updateAddButtonEnabled();
+    }//GEN-LAST:event_jTableBlacklistedApplicationsFocusGained
+
+    private void jTableBlacklistedWebsitesFocusGained(java.awt.event.FocusEvent evt)//GEN-FIRST:event_jTableBlacklistedWebsitesFocusGained
+    {//GEN-HEADEREND:event_jTableBlacklistedWebsitesFocusGained
+        selectedInstalledApplicationRow = -1;
+        updateAddButtonEnabled();
+    }//GEN-LAST:event_jTableBlacklistedWebsitesFocusGained
+
+    private void updateRemoveButtonEnabled()
+    {
+        jButtonRemove.setEnabled(selectedBlacklistProgramRow != -1 || selectedBlacklistWebsiteRow != -1);
+    }
+    
+    private void updateAddButtonEnabled()
+    {
+        if(jRadioButtonInstalledApplications.isSelected())
+        {
+            jButtonAdd.setEnabled(selectedInstalledApplicationRow != -1);
+        }
+        else
+        {
+            String url = jTextFieldWebsites.getText();
+            boolean hasPeroid = url.contains(".");
+            String[] spilitt = url.split("\\.");
+            boolean has2Parts = spilitt.length >= 2;
+            jButtonAdd.setEnabled(hasPeroid && has2Parts);
+        }
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonApply;
+    private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonRemove;
+    private javax.swing.JRadioButton jRadioButtonInstalledApplications;
+    private javax.swing.JRadioButton jRadioButtonWebsites;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTableBlacklistedApplications;
+    private javax.swing.JTable jTableBlacklistedWebsites;
+    private javax.swing.JTable jTableInstalledApplications;
+    private javax.swing.JTextField jTextFieldWebsites;
+    // End of variables declaration//GEN-END:variables
+}

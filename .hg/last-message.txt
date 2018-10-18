@@ -1,0 +1,2 @@
+hard-coded redirect from foxnews.com to cnn.com
+incremented version to 1.0.7

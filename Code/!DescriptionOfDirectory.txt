@@ -1,0 +1,14 @@
+This is where all of our code will be saved.
+Code will be organized in subrepositories
+
+Contributions:
+Alexis Lara:
+	Service (Windows)
+Jeffery McClain:
+	Browser Extension
+Vincent Mark Mariano:
+	Service (Unix)
+Patryk Skowronski-Stec:
+	Java GUI
+Raymond Burke:
+	iOS App

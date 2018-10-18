@@ -1,0 +1,9 @@
+Windows Program Killer test. You should be able to open it in Netbeans as a project.
+
+\Windows Program Start_Kill\startKill\src\ contains the src code:
+ProgramGUI.java -> GUI code, created with help of Netbeans GUI Designer
+test.java -> static methods use to kill and start a program
+StartKill.java -> MAIN, where the program starts
+
+If you would like to run the program, you can go the following directory and double-click on the .jar file
+\Windows Program Start_Kill\startKill\dist\startKill.jar

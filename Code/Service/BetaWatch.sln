@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetaWatchService", "BetaWatchService\BetaWatchService.csproj", "{54B041D6-F68F-4413-AB46-651209EDA2D8}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Beta Watch Install", "Beta Watch Install\Beta Watch Install.vdproj", "{10F72056-F144-42BB-9E5C-8BFC587FFFD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54B041D6-F68F-4413-AB46-651209EDA2D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54B041D6-F68F-4413-AB46-651209EDA2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54B041D6-F68F-4413-AB46-651209EDA2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54B041D6-F68F-4413-AB46-651209EDA2D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F72056-F144-42BB-9E5C-8BFC587FFFD1}.Debug|Any CPU.ActiveCfg = Debug
+		{10F72056-F144-42BB-9E5C-8BFC587FFFD1}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

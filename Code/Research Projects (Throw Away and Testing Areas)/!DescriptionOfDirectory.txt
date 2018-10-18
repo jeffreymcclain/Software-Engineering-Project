@@ -1,0 +1,4 @@
+This directory is for where we can keep test projects we made.
+The intension is we try to make a feature work in its own project before incorporating it into the main project
+Please put all test projects into their own directory with a clear name.
+Example: "Windows program killer"
